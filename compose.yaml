@@ -7,14 +7,14 @@ services:
     restart: unless-stopped
     volumes:
       - ./bitpingd-volume:/root/.bitpingd
-    tty: true # Для интерактивного режима
+    tty: true # For interactive mode
 
   bitpingd-cli:
     image: bitping/bitpingd:latest
     container_name: bitpingd-cli
     restart: "no" # CLI используется только для аутентификации
     entrypoint: /app/bitpingd
-    command: "login --email ******** --password ********" # Укажите MFA, если требуется
+    command: "login --email ******** --password ********" # Provide MFA if required
     volumes:
       - ./bitpingd-volume:/root/.bitpingd
     stdin_open: true
@@ -36,7 +36,7 @@ services:
     environment:
       BITPING_EMAIL: ********
       BITPING_PASSWORD: ********
-      BITPING_MFA: "" # Укажите MFA-код, если требуется
+      BITPING_MFA: "" # Provide MFA if required
     volumes:
       - ./bitpingd-volume:/root/.bitpingd
 
