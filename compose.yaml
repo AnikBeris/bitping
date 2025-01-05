@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  bitpingd-interactive:
+    image: bitping/bitpingd:latest
+    container_name: bitpingd-interactive
+    restart: unless-stopped
+    volumes:
+      - ./bitpingd-volume:/root/.bitpingd
+    tty: true # Для интерактивного режима
+
+  bitpingd-cli:
+    image: bitping/bitpingd:latest
+    container_name: bitpingd-cli
+    restart: "no" # CLI используется только для аутентификации
+    entrypoint: /app/bitpingd
+    command: "login --email anikberis14@gmail.com --password Stas777stas" # Укажите MFA, если требуется
+    volumes:
+      - ./bitpingd-volume:/root/.bitpingd
+    stdin_open: true
+    tty: true
+
+  bitpingd-node:
+    image: bitping/bitpingd:latest
+    container_name: bitpingd-node
+    restart: unless-stopped
+    depends_on:
+      - bitpingd-cli
+    volumes:
+      - ./bitpingd-volume:/root/.bitpingd
+
+  bitpingd-env:
+    image: bitping/bitpingd:latest
+    container_name: bitpingd-env
+    restart: unless-stopped
+    environment:
+      BITPING_EMAIL: anikberis14@gmail.com
+      BITPING_PASSWORD: Stas777stas
+      BITPING_MFA: "" # Укажите MFA-код, если требуется
+    volumes:
+      - ./bitpingd-volume:/root/.bitpingd
+
+volumes:
+  bitpingd-volume:
+    driver: local
