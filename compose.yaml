@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  bitpingd-interactive:
+    image: bitping/bitpingd:latest
+    container_name: bitpingd-interactive
+    restart: unless-stopped
+    volumes:
+      - ./bitpingd-volume:/root/.bitpingd
+    tty: true # For interactive mode
+
+  bitpingd-cli:
+    image: bitping/bitpingd:latest
+    container_name: bitpingd-cli
+    restart: "no" # CLI used for authentication only
+    entrypoint: /app/bitpingd
+    command: "login --email *********** --password ***********" # Provide MFA if required
+    volumes:
+      - ./bitpingd-volume:/root/.bitpingd
+    stdin_open: true
+    tty: true
+
+  bitpingd-node:
+    image: bitping/bitpingd:latest
+    container_name: bitpingd-node
+    restart: unless-stopped
+    depends_on:
+      - bitpingd-cli
+    volumes:
+      - ./bitpingd-volume:/root/.bitpingd
+
+  bitpingd-env:
+    image: bitping/bitpingd:latest
+    container_name: bitpingd-env
+    restart: unless-stopped
+    environment:
+      BITPING_EMAIL: ***********
+      BITPING_PASSWORD: ***********
+      BITPING_MFA: "" # Provide MFA if required
+    volumes:
+      - ./bitpingd-volume:/root/.bitpingd
+
+volumes:
+  bitpingd-volume:
+    driver: local
