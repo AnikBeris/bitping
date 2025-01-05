@@ -14,7 +14,7 @@ services:
     container_name: bitpingd-cli
     restart: "no" # CLI используется только для аутентификации
     entrypoint: /app/bitpingd
-    command: "login --email anikberis14@gmail.com --password Stas777stas" # Укажите MFA, если требуется
+    command: "login --email ******** --password ********" # Укажите MFA, если требуется
     volumes:
       - ./bitpingd-volume:/root/.bitpingd
     stdin_open: true
@@ -34,8 +34,8 @@ services:
     container_name: bitpingd-env
     restart: unless-stopped
     environment:
-      BITPING_EMAIL: anikberis14@gmail.com
-      BITPING_PASSWORD: Stas777stas
+      BITPING_EMAIL: ********
+      BITPING_PASSWORD: ********
       BITPING_MFA: "" # Укажите MFA-код, если требуется
     volumes:
       - ./bitpingd-volume:/root/.bitpingd
